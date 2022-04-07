@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es6",            // import를 지원하는 es5
+    "module": "CommonJS",
+    "outDir": "build/",         // 빌드 경로
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "resolveJsonModule": true                           
+  },
+  "include": ["src/**/*"],
+}
