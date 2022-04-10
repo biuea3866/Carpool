@@ -11,10 +11,15 @@ class JwtUtils {
         }, SECRET_KEY);
     }
 
-    public async verify(token: string): Promise<string | jwt.JwtPayload> {
+    public async verify(token: string): Promise<any> {
         return jwt.verify(token.split('Bearer ')[1],
                           SECRET_KEY);
     }
 }
 
-export { JwtUtils };
+const jwtUtils = new JwtUtils();
+
+export { 
+    jwtUtils,
+    JwtUtils
+};

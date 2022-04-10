@@ -1,10 +1,11 @@
 import { ApolloError } from "apollo-server-core";
+import { UN_AUTHENTICATION } from "../constants/result.code";
 import { logger } from "../utils/logger";
 
 class ErrorHandler {
     constructor() {}
 
-    public handler(
+    public error(
         method: string,
         message: string,
         code: number
@@ -14,10 +15,26 @@ class ErrorHandler {
         throw new ApolloError(
             message,
             code.toString(), {
-                'code_number': code
+                'code': code
+            }
+        );
+    }
+
+    public authenticationError(method: string) {
+        logger.error(method + ": Not Authenticated");
+
+        throw new ApolloError(
+            "Not Authenticated",
+            UN_AUTHENTICATION.toString(), {
+                'code': UN_AUTHENTICATION
             }
         );
     }
 }
 
-export { ErrorHandler };
+const errorHandler = new ErrorHandler();
+
+export { 
+    errorHandler,
+    ErrorHandler 
+};

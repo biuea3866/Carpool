@@ -6,8 +6,8 @@ import { LoginUserDto } from "../dto/login.user.dto";
 import { ModifyUserDto } from "../dto/modify.user.dto";
 import { RegisterUserDto } from "../dto/register.user.dto";
 import { ResponseDto } from "../dto/response.dto";
+import { authService } from "../services/auth.service";
 
-const authService: AuthService = new AuthService();
 const resolvers = {
     Query: {
         getUser: async (context: any): Promise<ResponseDto> => {
@@ -15,38 +15,61 @@ const resolvers = {
         },
         getRiderInfo: async (
             context: any,
-            args: GetRiderInfoDto
+            args: any
         ): Promise<ResponseDto> => {
-            return await authService.getOtherUser(context, args);
+            const getRiderInfo: GetRiderInfoDto = args.getRiderInfo;
+
+            return await authService.getRiderInfo(
+                context, 
+                getRiderInfo
+            );
         },
-        checkEmail: async (args: CheckEmailDto): Promise<ResponseDto> => {
-            return await authService.checkEmail(args);
+        checkEmail: async (args: any): Promise<ResponseDto> => {
+            const checkEmailDto: CheckEmailDto = args.checkEmailDto;
+
+            return await authService.checkEmail(checkEmailDto);
         },
-        checkNickname: async (args: CheckNicknameDto): Promise<ResponseDto> => {
-            return await authService.checkNickname(args);
+        checkNickname: async (args: any): Promise<ResponseDto> => {
+            const checkNicknameDto: CheckNicknameDto = args.checkNicknameDto;
+
+            return await authService.checkNickname(checkNicknameDto);
         },
     },
     Mutation: {
-        loginUser: async (args: LoginUserDto): Promise<ResponseDto> => {
-            return await authService.login(args);
+        loginUser: async (args: any): Promise<ResponseDto> => {
+            const loginUserDto: LoginUserDto = args.loginUserDto;
+
+            return await authService.loginUser(loginUserDto);
         },
         logout: async (context: any): Promise<ResponseDto> => {
-            return await authService.logout(context);
+            return await authService.logoutUser(context);
         }, 
-        register: async (args: RegisterUserDto): Promise<ResponseDto> => {
-            return await authService.register(args);
+        register: async (args: any): Promise<ResponseDto> => {
+            const registerUserDto: RegisterUserDto = args.registerUserDto;
+
+            return await authService.registerUser(registerUserDto);
         },
         modifyUser: async (
             context: any,
-            args: ModifyUserDto
+            args: any
         ): Promise<ResponseDto> => {
-            return await authService.modifyUser(args, context);
+            const modifyUserDto: ModifyUserDto = args.modifyUserDto;
+
+            return await authService.modifyUser(
+                context, 
+                modifyUserDto
+            );
         },
         deleteUser: async (
             context: any,
-            args: DeleteUserDto
+            args: any
         ): Promise<ResponseDto> => {
-            return await authService.deleteUser(args, context);
+            const deleteUserDto: DeleteUserDto = args.deleteUserDto;
+
+            return await authService.deleteUser(
+                context, 
+                deleteUserDto
+            );
         }
     },
 };

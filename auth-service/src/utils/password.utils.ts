@@ -18,4 +18,9 @@ class PasswordUtils {
     }
 }
 
-export { PasswordUtils };
+const passwordUtils = new PasswordUtils();
+
+export { 
+    passwordUtils,
+    PasswordUtils
+};
