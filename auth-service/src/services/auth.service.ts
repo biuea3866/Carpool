@@ -1,4 +1,4 @@
-import { DATABASE_ERROR, DUPLICATED_EMAIL, DUPLICATED_NICKNAME, EXCEPTION_ERROR, FAILED_TO_CREATE_USER, FAILED_TO_DELETE_USER, FAILED_TO_UPDATE_LICENSE, FAILED_TO_UPDATE_NICKNAME, FAILED_TO_UPDATE_PASSWORD, NOT_FOUND_USER, NOT_MATCHED_PASSWORD, SIGNED_IN } from "../constants/result.code";
+import { DATABASE_ERROR, DUPLICATED_EMAIL, DUPLICATED_NICKNAME, EXCEPTION_ERROR, FAILED_TO_CREATE_USER, FAILED_TO_DELETE_USER, FAILED_TO_UPDATE_LICENSE, FAILED_TO_UPDATE_NICKNAME, FAILED_TO_UPDATE_PASSWORD, LOGOUTED, NOT_FOUND_USER, NOT_MATCHED_PASSWORD, SIGNED_IN } from "../constants/result.code";
 import { LoginUserDto } from "../dto/login.user.dto";
 import { ResponseDto } from "../dto/response.dto";
 import { AuthServiceDependency } from "../modules/service.dependency.module";
@@ -334,8 +334,8 @@ class AuthService {
             }
 
             const deleteUserResponse: ResponseDto = await this.authServiceDependency.authRepository.deleteUser(
-                isDelete,
-                userId
+                userId,
+                isDelete
             );
 
             if(
@@ -349,11 +349,37 @@ class AuthService {
                     deleteUserResponse.code
                 );
             }
+        
+            logger.info("AuthService's deleteUser: " + deleteUserResponse.payload);
 
             return deleteUserResponse;
         } catch(error) {
             this.authServiceDependency.errorHandler.error(
                 "AuthService's deleteUser",
+                error.toString(),
+                EXCEPTION_ERROR
+            );
+        }
+    }
+
+    public async logoutUser(context: any): Promise<ResponseDto> {
+        try {
+            const userId: string = (await this.authServiceDependency.jwtUtils.verify(context.userId)).data;
+
+            if(!userId) {
+                this.authServiceDependency.errorHandler.authenticationError("AuthService's logoutUser");
+            }
+        
+            logger.info("AuthService's logoutUser: Successfully logout!");
+            
+            return {
+                code: LOGOUTED,
+                message: "Successfully logouted!",
+                payload: null
+            };
+        } catch(error) {
+            this.authServiceDependency.errorHandler.error(
+                "AuthService's logoutUser",
                 error.toString(),
                 EXCEPTION_ERROR
             );

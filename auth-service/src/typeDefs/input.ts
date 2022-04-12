@@ -31,7 +31,7 @@ const typeDefs = gql`
         license: LicenseInput
     }
 
-    input DeleteInput {
+    input DeleteUserInput {
         isDelete: Boolean!
     }
 
